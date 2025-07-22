@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   Image,
   StyleSheet,
@@ -36,7 +35,7 @@ const Login = ({ navigation }) => {
       setUserName("");
       setPassword("");
       setPassError("");
-      navigation.navigate("Home");
+      navigation.navigate("HomeTab")
     }
   };
 
@@ -75,6 +74,7 @@ const Login = ({ navigation }) => {
               value={password}
               onChangeText={setPassword}
               style={styles.txtinput}
+              secureTextEntry
             />
             <TouchableOpacity
               style={{ alignItems: "flex-end", marginTop: 8 }}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: "cornflowerblue",
     borderRadius: 5,
     padding: 8,
+    width:300
   },
   btntext: {
     textAlign: "center",
