@@ -8,8 +8,7 @@ import {
   View,
 } from "react-native";
 
-
-export default function Home() {
+export default function Home({ navigation }) {
   const [task, setTask] = useState("");
   const [allTask, setAllTask] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
@@ -33,8 +32,8 @@ export default function Home() {
   const handleDelete = (index) => {
     const filterTask = allTask.filter((_, i) => i != index);
     setAllTask(filterTask);
-    setTask("")
-    setEditIndex(null)
+    setTask("");
+    setEditIndex(null);
   };
 
   //edit index function
@@ -54,16 +53,17 @@ export default function Home() {
   //render function for flatlist
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.tasklist}>
-        <Text style={styles.taskitem}>{item.task}</Text>
-        <View style={styles.taskbtn}>
-          <TouchableOpacity onPress={() => handleEditIndex(item.index)}>
-            <Text style={styles.editbtn}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item.index)}>
-            <Text style={styles.deletebtn}>Delete</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.taskcontainer}>
+        <TouchableOpacity
+          style={styles.tasklist}
+          onPress={() =>
+            navigation.navigate("Action", {
+              taskname: item.task,
+            })
+          }
+        >
+          <Text style={styles.taskitem}>{item.task}</Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -130,24 +130,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
   },
+  taskcontainer: {
+    marginTop: 5,
+  },
   tasklist: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 8,
-  },
-  taskbtn: {
-    flexDirection: "row",
-  },
-  editbtn: {
-    color: "green",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginRight: 15,
-  },
-  deletebtn: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    width: 310,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   taskitem: {
     fontSize: 18,

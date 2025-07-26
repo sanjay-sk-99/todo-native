@@ -7,6 +7,7 @@ import Login from "./src/screens/Login";
 import Home from "./src/tabs/Home";
 import ForgetPass from "./src/screens/ForgetPass";
 import Profile from "./src/tabs/Profile";
+import Action from "./src/screens/Action";
 //import images
 import home from "./assets/home.png";
 import profile from "./assets/profile.png";
@@ -33,6 +34,11 @@ export default function App() {
             name="HomeTab"
             component={TabNavigator}
             options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="Action"
+            component={Action}
+            // options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
