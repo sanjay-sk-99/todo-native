@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,10 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = ({ navigation }) => {
+  const { logIn } = useContext(AuthContext);
   //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +37,8 @@ const Login = ({ navigation }) => {
       setUserName("");
       setPassword("");
       setPassError("");
-      navigation.navigate("HomeTab");
+      //storing login token in useContext
+      logIn("1234");
     }
   };
 

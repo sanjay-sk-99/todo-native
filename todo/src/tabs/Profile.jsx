@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,9 +11,12 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { CommonActions } from "@react-navigation/native";
 import profile from "../../assets/profile.png";
+import { AuthContext } from "../context/AuthContext";
 
 const Profile = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState(null);
+
+  const { logOut } = useContext(AuthContext);
 
   // Handle external link
   const handleExternelLink = (url) => {
@@ -61,17 +64,7 @@ const Profile = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.btncontainer}>
-        <TouchableOpacity
-          style={styles.loginbtn}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: "Login" }],
-              })
-            )
-          }
-        >
+        <TouchableOpacity style={styles.loginbtn} onPress={()=>logOut()}>
           <Text style={styles.btntext}>Logout</Text>
         </TouchableOpacity>
       </View>

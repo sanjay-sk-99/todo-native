@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const ForgetPass = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -28,6 +29,17 @@ const ForgetPass = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <View style={{ marginVertical: 50, marginHorizontal: 20 }}>
+        <TouchableOpacity
+          style={styles.customHeader}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="caretleft" size={30} color="orange" />
+          <Text style={{ fontSize: 19, fontWeight: "bold" }}>
+            Forget Password
+          </Text>
+        </TouchableOpacity>
+      </View>
       {/* it will enable scrolling */}
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -114,6 +126,12 @@ const styles = StyleSheet.create({
     height: 400,
     alignItems: "center",
     justifyContent: "center",
+  },
+  customHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 2,
+    borderColor: "gray",
+    paddingBottom: 15,
   },
 });
 

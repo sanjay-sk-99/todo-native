@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useContext, useState } from "react";
 import { CommonActions } from "@react-navigation/native";
 import { todoContext } from "../context/TodoContext";
-
+import { Feather,AntDesign } from "@expo/vector-icons";
 
 const Action = ({ navigation }) => {
   //access state from context api
@@ -33,11 +33,11 @@ const Action = ({ navigation }) => {
           <Text style={styles.text}>{taskname}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Edit")}>
-            <Text style={styles.editbtn}>Edit</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Edit")} style={{marginRight:15}}>
+            <Feather name="edit" size={24} color="green" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(taskname)}>
-            <Text style={styles.deletebtn}>Delete</Text>
+            <AntDesign name="delete" size={24} color="red" />
           </TouchableOpacity>
         </View>
       </View>
