@@ -1,22 +1,42 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import { useContext, useState } from "react";
+import { CommonActions } from "@react-navigation/native";
+import { todoContext } from "../context/TodoContext";
 
-const Action = ({ route }) => {
-  const { taskname } = route.params;
+
+const Action = ({ navigation }) => {
+  //access state from context api
+  const { allTask, setAllTask, editIndex, setEditIndex } =
+    useContext(todoContext);
+
+  //store the task name for deleting
+  const taskname = allTask[editIndex];
+
+  //handle delete function
+  const handleDelete = (taskname) => {
+    const filterTask = allTask.filter((task) => task != taskname);
+    setAllTask(filterTask);
+    //after deleting navigate to home screen
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "HomeTab" }],
+      })
+    );
+  };
   return (
     <View style={styles.container}>
-
       <Text style={styles.title}>Actions</Text>
 
-      <View style={styles.taskcontainer}>
+      <View style={[styles.taskcontainer]}>
         <View>
           <Text style={styles.text}>{taskname}</Text>
         </View>
-        <View style={{flexDirection:'row'}}>
-          <TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Edit")}>
             <Text style={styles.editbtn}>Edit</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(taskname)}>
             <Text style={styles.deletebtn}>Delete</Text>
           </TouchableOpacity>
         </View>
@@ -36,12 +56,12 @@ const styles = StyleSheet.create({
   taskcontainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:'center',
-    height:60,
-    width:300,
-    paddingHorizontal:10,
-    borderRadius:8,
-    backgroundColor:'#fff',
+    alignItems: "center",
+    height: 60,
+    width: 300,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

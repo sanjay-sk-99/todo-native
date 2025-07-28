@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -7,41 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { todoContext } from "../context/TodoContext";
 
 export default function Home({ navigation }) {
-  const [task, setTask] = useState("");
-  const [allTask, setAllTask] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
+  const { task, setTask, allTask, setAllTask, editIndex, setEditIndex } =
+    useContext(todoContext);
+    const [error,setError]=useState("")
 
   //handle adding the new task and edit existing task
   const handleTask = () => {
     if (task) {
-      if (editIndex !== null) {
-        const updateTasks = [...allTask];
-        updateTasks[editIndex] = task;
-        setAllTask(updateTasks);
-        setEditIndex(null);
-      } else {
         setAllTask([...allTask, task]);
-      }
+        setError("")
       setTask("");
+    }else{
+      setError("Please Enter the Todo")
     }
   };
 
-  //handle delete function
-  const handleDelete = (index) => {
-    const filterTask = allTask.filter((_, i) => i != index);
-    setAllTask(filterTask);
-    setTask("");
-    setEditIndex(null);
-  };
-
-  //edit index function
-  const handleEditIndex = (index) => {
-    const edittask = allTask[index];
-    setTask(edittask);
-    setEditIndex(index);
-  };
 
   //maped for flatlist
   const mapedTask = allTask.map((task, i) => ({
@@ -56,18 +39,17 @@ export default function Home({ navigation }) {
       <View style={styles.taskcontainer}>
         <TouchableOpacity
           style={styles.tasklist}
-          onPress={() =>
-            navigation.navigate("Action", {
-              taskname: item.task,
-            })
-          }
+          onPress={() => {
+            setEditIndex(item.index);
+            navigation.navigate("Action");
+          }}
         >
           <Text style={styles.taskitem}>{item.task}</Text>
         </TouchableOpacity>
       </View>
     );
   };
-  //console.log(allTask);
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sanjay's Todo </Text>
@@ -78,10 +60,9 @@ export default function Home({ navigation }) {
         value={task}
         onChangeText={(text) => setTask(text)}
       />
+      {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
-        <Text style={styles.addbtntext}>
-          {editIndex !== null ? "Update Task" : "Add Task"}
-        </Text>
+        <Text style={styles.addbtntext}>Add Task</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -96,7 +77,8 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
+    paddingTop: 40,
+    paddingHorizontal:40,
     marginTop: 40,
   },
   text: {
@@ -150,4 +132,8 @@ const styles = StyleSheet.create({
   taskitem: {
     fontSize: 18,
   },
+  error:{
+    color:'red',
+    marginBottom:5,
+  }
 });

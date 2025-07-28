@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 const Login = ({ navigation }) => {
-    //state for setting username,password and error
+  //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [userError, setUserError] = useState("");
@@ -35,9 +35,8 @@ const Login = ({ navigation }) => {
       setUserName("");
       setPassword("");
       setPassError("");
-      navigation.navigate("HomeTab")
+      navigation.navigate("HomeTab");
     }
- 
   };
 
   return (
@@ -46,49 +45,48 @@ const Login = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-        {/* it will enable scrolling */}
+      {/* it will enable scrolling */}
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.container}
       >
         {/* this section contain full data for login form */}
-      
-          <View style={styles.imgcontainer}>
-            <Image
-              source={require("../../assets/login-img.jpg")}
-              style={styles.img}
-            />
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.heading}>Login</Text>
 
-            <TextInput
-              placeholder="User Name"
-              value={username}
-              onChangeText={setUserName}
-              style={styles.txtinput}
-            />
+        <View style={styles.imgcontainer}>
+          <Image
+            source={require("../../assets/login-img.jpg")}
+            style={styles.img}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.heading}>Login</Text>
 
-            <Text style={styles.error}>{userError}</Text>
-            <TextInput
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              style={styles.txtinput}
-              secureTextEntry
-            />
-            <TouchableOpacity
-              style={{ alignItems: "flex-end", marginTop: 8 }}
-              onPress={() => navigation.navigate("ForgetPass")}
-            >
-              <Text style={{ color: "cornflowerblue" }}>Forget Password ?</Text>
-            </TouchableOpacity>
-            <Text style={styles.error}>{passError}</Text>
-            <TouchableOpacity style={styles.loginbtn} onPress={handleLogin}>
-              <Text style={styles.btntext}>Login</Text>
-            </TouchableOpacity>
-          </View>
-        
+          <TextInput
+            placeholder="User Name"
+            value={username}
+            onChangeText={setUserName}
+            style={styles.txtinput}
+          />
+
+          <Text style={styles.error}>{userError}</Text>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            style={styles.txtinput}
+            secureTextEntry
+          />
+          <TouchableOpacity
+            style={{ alignItems: "flex-end", marginTop: 8 }}
+            onPress={() => navigation.navigate("ForgetPass")}
+          >
+            <Text style={{ color: "cornflowerblue" }}>Forget Password ?</Text>
+          </TouchableOpacity>
+          <Text style={styles.error}>{passError}</Text>
+          <TouchableOpacity style={styles.loginbtn} onPress={handleLogin}>
+            <Text style={styles.btntext}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     flexGrow: 1,
-    paddingVertical:90
+    paddingVertical: 90,
   },
   heading: {
     fontSize: 20,
@@ -114,10 +112,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   imgcontainer: {
-    alignItems:'center',
-    width:'100%',
-    marginBottom:24
- 
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 24,
   },
   txtinput: {
     borderColor: "cornflowerblue",
@@ -133,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: "cornflowerblue",
     borderRadius: 5,
     padding: 8,
-    width:300
+    width: 300,
   },
   btntext: {
     textAlign: "center",
@@ -146,7 +143,7 @@ const styles = StyleSheet.create({
     color: "red",
   },
   textContainer: {
-     alignItems:'center'
+    alignItems: "center",
   },
 });
 

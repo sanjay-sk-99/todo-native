@@ -8,15 +8,19 @@ import Home from "./src/tabs/Home";
 import ForgetPass from "./src/screens/ForgetPass";
 import Profile from "./src/tabs/Profile";
 import Action from "./src/screens/Action";
+import EditScreen from "./src/screens/EditScreen";
 //import images
 import home from "./assets/home.png";
 import profile from "./assets/profile.png";
+//import context 
+import TodoContext from "./src/context/TodoContext";
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
-    <>
+    <TodoContext>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -38,11 +42,14 @@ export default function App() {
             <Stack.Screen
             name="Action"
             component={Action}
-            // options={{ headerShown: false }}
+          />
+          <Stack.Screen
+          name="Edit"
+          component={EditScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </TodoContext>
   );
 }
 
