@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 
 export const AuthContext = createContext();
 
@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
 
   const logIn = async (tokenvalue) => {
     try {
-      await AsyncStorage.setItem('token',tokenvalue)
+      await SecureStore.setItemAsync('token',tokenvalue)
       setToken(tokenvalue);
     } catch (e) {
       console.log("Error setting the token", e);
@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     try {
-      await AsyncStorage.removeItem('token')
+      await SecureStore.deleteItemAsync('token')
       setToken(null);
     } catch (e) {
       console.log("Error removing the token", e);
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = async () => {
       try {
-        const stored = await AsyncStorage.getItem('token')
+        const stored = await SecureStore.getItemAsync('token')
         if (stored) {
           setToken(stored);
         }
