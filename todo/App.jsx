@@ -1,14 +1,12 @@
 import Navigator from "./src/navigation/Navigator";
-//import context
-import TodoContext from "./src/context/TodoContext";
-import AuthProvider from "./src/context/AuthContext";
+//connecting redux sotre
+import store from "./src/app/store";
+import { Provider } from "react-redux";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <TodoContext>
-        <Navigator />
-      </TodoContext>
-    </AuthProvider>
+    <Provider store={store}>
+      <Navigator />
+    </Provider>
   );
 }

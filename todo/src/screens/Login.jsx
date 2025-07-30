@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import  {  useState } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,15 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import { AuthContext } from "../context/AuthContext";
+//import redux conectivity and state
+import { useDispatch } from "react-redux";
+import { logIn } from "../slices/features/authSlice";
 
 const Login = ({ navigation }) => {
-  const { logIn } = useContext(AuthContext);
+
+  //for triiger reducer function
+  const dispatch = useDispatch()
+
   //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -37,8 +42,8 @@ const Login = ({ navigation }) => {
       setUserName("");
       setPassword("");
       setPassError("");
-      //storing login token in useContext
-      logIn("1234");
+      //storing login token using redux
+      dispatch(logIn("1234"))
     }
   };
 

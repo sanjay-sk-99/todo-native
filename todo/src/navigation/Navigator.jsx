@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, ActivityIndicator, View, TouchableOpacity } from "react-native";
+import { useEffect } from "react";
 //importing screens
 import Login from "../../src/screens/Login";
 import Home from "../../src/tabs/Home";
@@ -12,17 +13,21 @@ import EditScreen from "../../src/screens/EditScreen";
 //import images
 import home from "../../assets/home.png";
 import profile from "../../assets/profile.png";
-//import context
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
-
-import AntDesign from "@expo/vector-icons/AntDesign";
+//import redux connectivity and state
+import { useDispatch, useSelector } from "react-redux";
+import { loadToken } from "../slices/features/authSlice";
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
-  //token and loading state from context
-  const { token, loading } = useContext(AuthContext);
+  //token and loading state from redux
+  const dispatch = useDispatch();
+  const { token, loading } = useSelector((state) => state.auth);
+
+  //check the user login info
+  useEffect(() => {
+    dispatch(loadToken());
+  }, []);
 
   // Loader screen
   if (loading) {
