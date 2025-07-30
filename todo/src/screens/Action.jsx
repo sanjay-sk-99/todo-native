@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useContext, useState } from "react";
 import { CommonActions } from "@react-navigation/native";
-import { todoContext } from "../context/TodoContext";
-import { Feather,AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
+//import redux conectivity and state
+import { setAllTask } from "../slices/features/todoSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Action = ({ navigation }) => {
-  //access state from context api
-  const { allTask, setAllTask, editIndex, setEditIndex } =
-    useContext(todoContext);
+  //get the state and dispatch function from redux store
+  const { allTask, editIndex } = useSelector((state) => state.todo);
+  const dispatch = useDispatch();
 
   //store the task name for deleting
   const taskname = allTask[editIndex];
@@ -15,7 +16,7 @@ const Action = ({ navigation }) => {
   //handle delete function
   const handleDelete = (taskname) => {
     const filterTask = allTask.filter((task) => task != taskname);
-    setAllTask(filterTask);
+    dispatch(setAllTask(filterTask));
     //after deleting navigate to home screen
     navigation.pop();
   };
@@ -28,7 +29,10 @@ const Action = ({ navigation }) => {
           <Text style={styles.text}>{taskname}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Edit")} style={{marginRight:15}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Edit")}
+            style={{ marginRight: 15 }}
+          >
             <Feather name="edit" size={24} color="green" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(taskname)}>

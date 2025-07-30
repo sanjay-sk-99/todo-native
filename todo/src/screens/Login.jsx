@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import  {  useState } from "react";
 import {
   View,
   Text,
@@ -11,11 +11,15 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import { AuthContext } from "../context/AuthContext";
-import * as SecureStore from "expo-secure-store";
+//import redux conectivity and state
+import { useDispatch } from "react-redux";
+import { logIn } from "../slices/features/authSlice";
 
 const Login = ({ navigation }) => {
-  const { setToken } = useContext(AuthContext);
+
+  //for triiger reducer function
+  const dispatch = useDispatch()
+
   //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -25,15 +29,6 @@ const Login = ({ navigation }) => {
   //fixed credential for validation
   const user = "sanjay";
   const pass = "sanjay@123";
-
-  const logIn = async (tokenvalue) => {
-    try {
-      await SecureStore.setItemAsync("token", tokenvalue);
-      setToken(tokenvalue);
-    } catch (e) {
-      console.log("Error setting the token", e);
-    }
-  };
 
   //login function and validate user credential
   const handleLogin = () => {
@@ -47,8 +42,8 @@ const Login = ({ navigation }) => {
       setUserName("");
       setPassword("");
       setPassError("");
-      //storing login token in useContext
-      logIn("1234");
+      //storing login token using redux
+      dispatch(logIn("1234"))
     }
   };
 

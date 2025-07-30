@@ -4,23 +4,28 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
-import { useContext, useState } from "react";
-import { CommonActions } from "@react-navigation/native";
-import { todoContext } from "../context/TodoContext";
+import {useState } from "react";
+//import redux conectivity and state
+import { updateTask } from "../slices/features/todoSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const EditScreen = ({ navigation }) => {
-  //access state from context api
-  const { allTask,setAllTask, editIndex } = useContext(todoContext);
+  //get the state and dispatch function from redux store
+  const { editIndex, allTask } = useSelector((state) => state.todo);
+  const dispatch = useDispatch();
 
   //store the task name for editing
   const taskname = allTask[editIndex];
   const [newTask, setNewTask] = useState(taskname);
 
-  const updateTask = () => {
-   setAllTask(prev =>
-      prev.map((task, i) => (i === editIndex ? newTask : task))
-    );
+  const handleUpdateTask = () => {
+    if(!task.trim()){
+      return Alert.alert("please Enter Todo")
+    }
+    dispatch(updateTask({ index: editIndex, value: task }));
     navigation.popToTop()
   };
 
@@ -31,7 +36,7 @@ const EditScreen = ({ navigation }) => {
         value={newTask}
         onChangeText={(text) => setNewTask(text)}
       />
-      <TouchableOpacity style={styles.addbtn} onPress={updateTask}>
+      <TouchableOpacity style={styles.addbtn} onPress={handleUpdateTask}>
         <Text style={styles.addbtntext}>Update Task</Text>
       </TouchableOpacity>
     </View>

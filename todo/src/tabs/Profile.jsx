@@ -14,8 +14,9 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/profile.png";
-import { AuthContext } from "../context/AuthContext";
-import * as SecureStore from "expo-secure-store";
+//import redux conectivity and state
+import { logOut } from "../slices/features/authSlice";
+import { useDispatch } from "react-redux";
 //for form handling
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -23,17 +24,8 @@ import * as Yup from "yup";
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
 
-  const { setToken } = useContext(AuthContext);
-
-  //for logout function
-    const logOut = async () => {
-      try {
-        await SecureStore.deleteItemAsync("token");
-        setToken(null);
-      } catch (e) {
-        console.log("Error removing the token", e);
-      }
-    };
+  //for triiger reducer function
+  const dispatch = useDispatch()
 
   // Handle external link
   const handleExternalLink = (url) => {
@@ -101,7 +93,7 @@ const Profile = () => {
       >
         <View style={styles.container}>
           <View style={styles.btncontainer}>
-            <TouchableOpacity style={styles.loginbtn} onPress={logOut}>
+            <TouchableOpacity style={styles.loginbtn} onPress={() => dispatch(logOut())}>
               <Text style={styles.btntext}>Logout</Text>
             </TouchableOpacity>
           </View>

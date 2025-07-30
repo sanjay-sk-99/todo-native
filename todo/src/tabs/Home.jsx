@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -7,24 +7,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { todoContext } from "../context/TodoContext";
+//import redux conectivity and state
+import { addTask, setTask, setEditIndex } from "../slices/features/todoSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Home({ navigation }) {
-  const { task, setTask, allTask, setAllTask, editIndex, setEditIndex } =
-    useContext(todoContext);
-    const [error,setError]=useState("")
+  const [error, setError] = useState("");
+  //get the state and dispatch function from redux store
+  const { task, allTask } = useSelector((state) => state.todo);
+  const dispatch = useDispatch();
 
   //handle adding the new task and edit existing task
   const handleTask = () => {
     if (task) {
-        setAllTask([...allTask, task]);
-        setError("")
-      setTask("");
-    }else{
-      setError("Please Enter the Todo")
+      dispatch(addTask(task));
+      dispatch(setTask(""));
+      setError("");
+    } else {
+      setError("Please Enter the Todo");
     }
   };
-
 
   //maped for flatlist
   const mapedTask = allTask.map((task, i) => ({
@@ -40,7 +42,7 @@ export default function Home({ navigation }) {
         <TouchableOpacity
           style={styles.tasklist}
           onPress={() => {
-            setEditIndex(item.index);
+            dispatch(setEditIndex(item.index));
             navigation.navigate("Action");
           }}
         >
@@ -49,7 +51,7 @@ export default function Home({ navigation }) {
       </View>
     );
   };
- 
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sanjay's Todo </Text>
@@ -58,7 +60,7 @@ export default function Home({ navigation }) {
         style={styles.input}
         placeholder="enter the todo"
         value={task}
-        onChangeText={(text) => setTask(text)}
+        onChangeText={(text) => dispatch(setTask(text))}
       />
       {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
-    paddingHorizontal:40,
+    paddingHorizontal: 40,
     marginTop: 40,
   },
   text: {
@@ -132,8 +134,8 @@ const styles = StyleSheet.create({
   taskitem: {
     fontSize: 18,
   },
-  error:{
-    color:'red',
-    marginBottom:5,
-  }
+  error: {
+    color: "red",
+    marginBottom: 5,
+  },
 });
