@@ -15,6 +15,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/profile.png";
 import { AuthContext } from "../context/AuthContext";
+import * as SecureStore from "expo-secure-store";
 //for form handling
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -22,7 +23,17 @@ import * as Yup from "yup";
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
 
-  const { logOut } = useContext(AuthContext);
+  const { setToken } = useContext(AuthContext);
+
+  //for logout function
+    const logOut = async () => {
+      try {
+        await SecureStore.deleteItemAsync("token");
+        setToken(null);
+      } catch (e) {
+        console.log("Error removing the token", e);
+      }
+    };
 
   // Handle external link
   const handleExternalLink = (url) => {
@@ -90,7 +101,7 @@ const Profile = () => {
       >
         <View style={styles.container}>
           <View style={styles.btncontainer}>
-            <TouchableOpacity style={styles.loginbtn} onPress={() => logOut()}>
+            <TouchableOpacity style={styles.loginbtn} onPress={logOut}>
               <Text style={styles.btntext}>Logout</Text>
             </TouchableOpacity>
           </View>

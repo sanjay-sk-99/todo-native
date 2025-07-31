@@ -12,9 +12,10 @@ import {
   ScrollView,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
+import * as SecureStore from "expo-secure-store";
 
 const Login = ({ navigation }) => {
-  const { logIn } = useContext(AuthContext);
+  const { setToken } = useContext(AuthContext);
   //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +25,15 @@ const Login = ({ navigation }) => {
   //fixed credential for validation
   const user = "sanjay";
   const pass = "sanjay@123";
+
+  const logIn = async (tokenvalue) => {
+    try {
+      await SecureStore.setItemAsync("token", tokenvalue);
+      setToken(tokenvalue);
+    } catch (e) {
+      console.log("Error setting the token", e);
+    }
+  };
 
   //login function and validate user credential
   const handleLogin = () => {
