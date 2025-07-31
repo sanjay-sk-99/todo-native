@@ -11,29 +11,25 @@ import { todoContext } from "../context/TodoContext";
 
 const EditScreen = ({ navigation }) => {
   //access state from context api
-  const { allTask, setAllTask, editIndex, setEditIndex } =
-    useContext(todoContext);
+  const { allTask,setAllTask, editIndex } = useContext(todoContext);
 
   //store the task name for editing
   const taskname = allTask[editIndex];
-  const [task, setTask] = useState(taskname);
+  const [newTask, setNewTask] = useState(taskname);
 
   const updateTask = () => {
-    allTask[editIndex] = task;
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "HomeTab" }],
-      })
+   setAllTask(prev =>
+      prev.map((task, i) => (i === editIndex ? newTask : task))
     );
+    navigation.popToTop()
   };
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        value={task}
-        onChangeText={(text) => setTask(text)}
+        value={newTask}
+        onChangeText={(text) => setNewTask(text)}
       />
       <TouchableOpacity style={styles.addbtn} onPress={updateTask}>
         <Text style={styles.addbtntext}>Update Task</Text>

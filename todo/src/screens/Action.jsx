@@ -17,12 +17,7 @@ const Action = ({ navigation }) => {
     const filterTask = allTask.filter((task) => task != taskname);
     setAllTask(filterTask);
     //after deleting navigate to home screen
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "HomeTab" }],
-      })
-    );
+    navigation.pop();
   };
   return (
     <View style={styles.container}>
