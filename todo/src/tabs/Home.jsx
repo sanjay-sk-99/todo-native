@@ -12,7 +12,7 @@ import { addTask, setTask, setEditIndex } from "../slices/features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Home({ navigation }) {
-  const [error, setError] = useState("");
+  const [todoError, setTodoError] = useState("");
   //get the state and dispatch function from redux store
   const { task, allTask } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
@@ -22,9 +22,9 @@ export default function Home({ navigation }) {
     if (task) {
       dispatch(addTask(task));
       dispatch(setTask(""));
-      setError("");
+      setTodoError("");
     } else {
-      setError("Please Enter the Todo");
+      setTodoError("Please Enter the Todo");
     }
   };
 
@@ -62,7 +62,7 @@ export default function Home({ navigation }) {
         value={task}
         onChangeText={(text) => dispatch(setTask(text))}
       />
-      {error && <Text style={styles.error}>{error}</Text>}
+      {todoError && <Text style={styles.error}>{todoError}</Text>}
       <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
         <Text style={styles.addbtntext}>Add Task</Text>
       </TouchableOpacity>

@@ -22,10 +22,10 @@ const EditScreen = ({ navigation }) => {
   const [newTask, setNewTask] = useState(taskname);
 
   const handleUpdateTask = () => {
-    if(!task.trim()){
+    if(!newTask.trim()){
       return Alert.alert("please Enter Todo")
     }
-    dispatch(updateTask({ index: editIndex, value: task }));
+    dispatch(updateTask({ index: editIndex, value: newTask }));
     navigation.popToTop()
   };
 
@@ -35,6 +35,7 @@ const EditScreen = ({ navigation }) => {
         style={styles.input}
         value={newTask}
         onChangeText={(text) => setNewTask(text)}
+        multiline
       />
       <TouchableOpacity style={styles.addbtn} onPress={handleUpdateTask}>
         <Text style={styles.addbtntext}>Update Task</Text>

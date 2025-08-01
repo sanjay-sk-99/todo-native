@@ -26,7 +26,9 @@ const Action = ({ navigation }) => {
 
       <View style={[styles.taskcontainer]}>
         <View>
-          <Text style={styles.text}>{taskname}</Text>
+          <Text style={styles.text} numberOfLines={1}>
+            {taskname}
+          </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
@@ -82,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#DA70D6",
+    maxWidth: 200, 
   },
   title: {
     fontSize: 24,
