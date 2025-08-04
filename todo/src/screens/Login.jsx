@@ -10,12 +10,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import * as SecureStore from "expo-secure-store";
 
 const Login = ({ navigation }) => {
-  const { setToken } = useContext(AuthContext);
+  const { setToken,loading,setLoading } = useContext(AuthContext);
   //state for setting username,password and error
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -27,11 +28,13 @@ const Login = ({ navigation }) => {
   const pass = "sanjay@123";
 
   const logIn = async (tokenvalue) => {
-    try {
+    try {  
       await SecureStore.setItemAsync("token", tokenvalue);
       setToken(tokenvalue);
     } catch (e) {
       console.log("Error setting the token", e);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -48,11 +51,29 @@ const Login = ({ navigation }) => {
       setPassword("");
       setPassError("");
       //storing login token in useContext
+      setLoading(true)
       logIn("1234");
     }
   };
 
+    // Loader screen
+        if (loading) {
+          return (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#fff",
+              }}
+            >
+              <ActivityIndicator size="large" color="#DA70D6" />
+            </View>
+          );
+        }
+
   return (
+    
     // for overlapping the keyboard when we press input
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "#fff" }}

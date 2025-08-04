@@ -17,6 +17,36 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext,useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 
+ //for bottom tab navigation
+const TabNavigator = () => {
+  const Tab = createBottomTabNavigator();
+
+  return (
+    <Tab.Navigator initialRouteName="Home">
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: () => (
+            <Image source={home} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: () => (
+            <Image source={profile} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
@@ -56,35 +86,7 @@ const Navigator = () => {
     );
   }
 
-  //for bottom tab navigation
-const TabNavigator = () => {
-  const Tab = createBottomTabNavigator();
-
-  return (
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: () => (
-            <Image source={home} style={{ height: 30, width: 30 }} />
-          ),
-          tabBarActiveTintColor: "#DA70D6",
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: () => (
-            <Image source={profile} style={{ height: 30, width: 30 }} />
-          ),
-          tabBarActiveTintColor: "#DA70D6",
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
+ 
 
   return (
     <NavigationContainer>
