@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -8,41 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { todoContext } from "../context/TodoContext";
 
-export default function App() {
-  const [task, setTask] = useState("");
-  const [allTask, setAllTask] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
+export default function Home({ navigation }) {
+  const { task, setTask, allTask, setAllTask, editIndex, setEditIndex } =
+    useContext(todoContext);
+    const [error,setError]=useState("")
 
   //handle adding the new task and edit existing task
   const handleTask = () => {
     if (task) {
-      if (editIndex !== null) {
-        const updateTasks = [...allTask];
-        updateTasks[editIndex] = task;
-        setAllTask(updateTasks);
-        setEditIndex(null);
-      } else {
         setAllTask([...allTask, task]);
-      }
+        setError("")
       setTask("");
+    }else{
+      setError("Please Enter the Todo")
     }
   };
 
-  //handle delete function
-  const handleDelete = (index) => {
-    const filterTask = allTask.filter((_, i) => i != index);
-    setAllTask(filterTask);
-    setTask("")
-    setEditIndex(null)
-  };
-
-  //edit index function
-  const handleEditIndex = (index) => {
-    const edittask = allTask[index];
-    setTask(edittask);
-    setEditIndex(index);
-  };
 
   //maped for flatlist
   const mapedTask = allTask.map((task, i) => ({
@@ -54,20 +36,20 @@ export default function App() {
   //render function for flatlist
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.tasklist}>
-        <Text style={styles.taskitem}>{item.task}</Text>
-        <View style={styles.taskbtn}>
-          <TouchableOpacity onPress={() => handleEditIndex(item.index)}>
-            <Text style={styles.editbtn}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item.index)}>
-            <Text style={styles.deletebtn}>Delete</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.taskcontainer}>
+        <TouchableOpacity
+          style={styles.tasklist}
+          onPress={() => {
+            setEditIndex(item.index);
+            navigation.navigate("Action");
+          }}
+        >
+          <Text style={styles.taskitem}>{item.task}</Text>
+        </TouchableOpacity>
       </View>
     );
   };
-  //console.log(allTask);
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sanjay's Todo </Text>
@@ -78,10 +60,9 @@ export default function App() {
         value={task}
         onChangeText={(text) => setTask(text)}
       />
+      {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
-        <Text style={styles.addbtntext}>
-          {editIndex !== null ? "Update Task" : "Add Task"}
-        </Text>
+        <Text style={styles.addbtntext}>Add Task</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -96,7 +77,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
+    paddingTop: 40,
+    paddingHorizontal:40,
     marginTop: 40,
   },
   text: {
@@ -130,26 +112,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
   },
+  taskcontainer: {
+    marginTop: 5,
+  },
   tasklist: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 8,
-  },
-  taskbtn: {
-    flexDirection: "row",
-  },
-  editbtn: {
-    color: "green",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginRight: 15,
-  },
-  deletebtn: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    width: 310,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   taskitem: {
     fontSize: 18,
   },
+  error:{
+    color:'red',
+    marginBottom:5,
+  }
 });
