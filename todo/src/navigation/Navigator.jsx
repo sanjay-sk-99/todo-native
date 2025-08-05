@@ -14,10 +14,51 @@ import EditScreen from "../../src/screens/EditScreen";
 //import images
 import home from "../../assets/home.png";
 import profile from "../../assets/profile.png";
-import joke from "../../assets/joke.webp"
+import joke from "../../assets/joke.webp";
 //import redux connectivity and state
 import { useDispatch, useSelector } from "react-redux";
 import { loadToken } from "../slices/features/authSlice";
+
+//for bottom tab navigation
+const TabNavigator = () => {
+  const Tab = createBottomTabNavigator();
+
+  return (
+    <Tab.Navigator initialRouteName="Home">
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: () => (
+            <Image source={home} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+      <Tab.Screen
+        name="Joke"
+        component={Joke}
+        options={{
+          title: "Entertainment",
+          tabBarIcon: () => (
+            <Image source={joke} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: () => (
+            <Image source={profile} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -46,47 +87,6 @@ const Navigator = () => {
       </View>
     );
   }
-
-  //for bottom tab navigation
-  const TabNavigator = () => {
-    const Tab = createBottomTabNavigator();
-
-    return (
-      <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarIcon: () => (
-              <Image source={home} style={{ height: 30, width: 30 }} />
-            ),
-            tabBarActiveTintColor: "#DA70D6",
-          }}
-        />
-        <Tab.Screen
-          name="Joke"
-          component={Joke}
-          options={{
-            title: "Entertainment",
-            tabBarIcon: () => (
-              <Image source={joke} style={{ height: 30, width: 30 }} />
-            ),
-            tabBarActiveTintColor: "#DA70D6",
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarIcon: () => (
-              <Image source={profile} style={{ height: 30, width: 30 }} />
-            ),
-            tabBarActiveTintColor: "#DA70D6",
-          }}
-        />
-      </Tab.Navigator>
-    );
-  };
 
   return (
     <NavigationContainer>

@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { CommonActions } from "@react-navigation/native";
 import { Feather, AntDesign } from "@expo/vector-icons";
 //import redux conectivity and state
 import { setAllTask } from "../slices/features/todoSlice";
