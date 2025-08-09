@@ -2,22 +2,24 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, ActivityIndicator, View } from "react-native";
+import { useEffect } from "react";
 //importing screens
 import Login from "../../src/screens/Login";
 import Home from "../../src/tabs/Home";
 import ForgetPass from "../../src/screens/ForgetPass";
 import Profile from "../../src/tabs/Profile";
+import Joke from "../../src/tabs/Joke";
 import Action from "../../src/screens/Action";
 import EditScreen from "../../src/screens/EditScreen";
 //import images
 import home from "../../assets/home.png";
 import profile from "../../assets/profile.png";
-//import context
-import { AuthContext } from "../context/AuthContext";
-import { useContext,useEffect } from "react";
-import * as SecureStore from "expo-secure-store";
+import joke from "../../assets/joke.webp";
+//import redux connectivity and state
+import { useDispatch, useSelector } from "react-redux";
+import { loadToken } from "../slices/features/authSlice";
 
- //for bottom tab navigation
+//for bottom tab navigation
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
 
@@ -29,6 +31,17 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: () => (
             <Image source={home} style={{ height: 30, width: 30 }} />
+          ),
+          tabBarActiveTintColor: "#DA70D6",
+        }}
+      />
+      <Tab.Screen
+        name="Joke"
+        component={Joke}
+        options={{
+          title: "Entertainment",
+          tabBarIcon: () => (
+            <Image source={joke} style={{ height: 30, width: 30 }} />
           ),
           tabBarActiveTintColor: "#DA70D6",
         }}
@@ -50,24 +63,13 @@ const TabNavigator = () => {
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
-  //token and loading state from context
-  const { token, loading, setToken, setLoading } = useContext(AuthContext);
+  //token and loading state from redux
+  const dispatch = useDispatch();
+  const { token, loading } = useSelector((state) => state.auth);
 
-  //To check login state for initial rendering
+  //check the user login info
   useEffect(() => {
-    const checktoken = async () => {
-      try {
-        const stored = await SecureStore.getItemAsync("token");
-        if (stored) {
-          setToken(stored);
-        }
-      } catch (e) {
-        console.log("Error fetching token", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checktoken();
+    dispatch(loadToken());
   }, []);
 
   // Loader screen
@@ -85,8 +87,6 @@ const Navigator = () => {
       </View>
     );
   }
-
- 
 
   return (
     <NavigationContainer>
@@ -122,5 +122,3 @@ const Navigator = () => {
 };
 
 export default Navigator;
-
-

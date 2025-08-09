@@ -1,4 +1,3 @@
-import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -12,47 +11,49 @@ import {
   ScrollView,
   ActivityIndicator
 } from "react-native";
-import { AuthContext } from "../context/AuthContext";
-import * as SecureStore from "expo-secure-store";
+import { Formik } from "formik";
+import * as Yup from "yup";
+//import redux connectivity and state
+import { useDispatch } from "react-redux";
+import { logIn } from "../slices/features/authSlice";
+
+// Validation schema using Yup
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is required")
+    .email("Please enter a valid email address"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
 const Login = ({ navigation }) => {
-  const { setToken,loading,setLoading } = useContext(AuthContext);
-  //state for setting username,password and error
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [userError, setUserError] = useState("");
-  const [passError, setPassError] = useState("");
+  // For trigger reducer function
+  const dispatch = useDispatch();
 
-  //fixed credential for validation
-  const user = "sanjay";
-  const pass = "sanjay@123";
+  // Fixed credentials for validation
+  const validEmail = "sanjay@gmail.com";
+  const validPass = "sanjay@123";
 
-  const logIn = async (tokenvalue) => {
-    try {  
-      await SecureStore.setItemAsync("token", tokenvalue);
-      setToken(tokenvalue);
-    } catch (e) {
-      console.log("Error setting the token", e);
-    }finally{
-      setLoading(false)
-    }
+  // Initial form values
+  const initialValues = {
+    email: "",
+    password: "",
   };
 
-  //login function and validate user credential
-  const handleLogin = () => {
-    if (user != username) {
-      setUserError("Enter valid Username");
-    } else if (pass != password) {
-      setUserError("");
-      setPassError("Enter valid Password");
+  // Handle form submission
+  const handleSubmit = (values, { setFieldError, resetForm }) => {
+    const { email, password } = values;
+
+    if (validEmail !== email) {
+      setFieldError("email", "Enter valid Email");
+    } else if (validPass !== password) {
+      setFieldError("password", "Enter valid Password");
     } else {
       Alert.alert("Login Successfully");
-      setUserName("");
-      setPassword("");
-      setPassError("");
-      //storing login token in useContext
-      setLoading(true)
-      logIn("1234");
+      resetForm();
+      // Storing login token using redux
+      dispatch(logIn("1234"));
     }
   };
 
@@ -73,60 +74,102 @@ const Login = ({ navigation }) => {
         }
 
   return (
-    
-    // for overlapping the keyboard when we press input
+    // For overlapping the keyboard when we press input
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {/* it will enable scrolling */}
+      {/* It will enable scrolling */}
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.container}
       >
-        {/* this section contain full data for login form */}
-
+        {/* This section contains full data for login form */}
         <View style={styles.imgcontainer}>
           <Image
             source={require("../../assets/login-img.jpg")}
             style={styles.img}
           />
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.heading}>Login</Text>
 
-          <TextInput
-            placeholder="User Name"
-            value={username}
-            onChangeText={setUserName}
-            style={styles.txtinput}
-          />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+      
+          }) => (
+            <View style={styles.textContainer}>
+              <Text style={styles.heading}>Login</Text>
 
-          <Text style={styles.error}>{userError}</Text>
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            style={styles.txtinput}
-            secureTextEntry
-          />
-          <TouchableOpacity
-            style={{ alignItems: "flex-end", marginTop: 8 }}
-            onPress={() => navigation.navigate("ForgetPass")}
-          >
-            <Text style={{ color: "cornflowerblue" }}>Forget Password ?</Text>
-          </TouchableOpacity>
-          <Text style={styles.error}>{passError}</Text>
-          <TouchableOpacity style={styles.loginbtn} onPress={handleLogin}>
-            <Text style={styles.btntext}>Login</Text>
-          </TouchableOpacity>
-        </View>
+              <TextInput
+                placeholder="Email Address"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                style={[
+                  styles.txtinput,
+                  touched.email && errors.email && styles.inputError,
+                ]}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+
+              <TextInput
+                placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                style={[
+                  styles.txtinput,
+                  touched.password && errors.password && styles.inputError,
+                ]}
+                secureTextEntry
+              />
+
+               {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <TouchableOpacity
+                style={{ alignItems: "flex-end", marginTop: 8 }}
+                onPress={() => navigation.navigate("ForgetPass")}
+              >
+                <Text style={{ color: "cornflowerblue" }}>Forget Password ?</Text>
+              </TouchableOpacity>
+
+             
+
+              <TouchableOpacity
+                style={[
+                  styles.loginbtn,
+            
+                ]}
+                onPress={handleSubmit}
+               
+              >
+                <Text style={styles.btntext}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
-//stylesheet for login component
+// Stylesheet for login component
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
@@ -157,6 +200,10 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 300,
     fontSize: 20,
+    marginBottom: 5,
+  },
+  inputError: {
+    borderColor: "red",
   },
   loginbtn: {
     borderWidth: 2,
@@ -165,6 +212,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 8,
     width: 300,
+    marginTop: 10,
+  },
+  disabledBtn: {
+    backgroundColor: "#ccc",
+    borderColor: "#ccc",
   },
   btntext: {
     textAlign: "center",
@@ -175,6 +227,9 @@ const styles = StyleSheet.create({
   error: {
     margin: 5,
     color: "red",
+    fontSize: 14,
+    alignSelf: "flex-start",
+    marginLeft: 10,
   },
   textContainer: {
     alignItems: "center",
