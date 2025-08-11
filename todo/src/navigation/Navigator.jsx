@@ -18,13 +18,24 @@ import joke from "../../assets/joke.webp";
 //import redux connectivity and state
 import { useDispatch, useSelector } from "react-redux";
 import { loadToken } from "../slices/features/authSlice";
+import Search from "../screens/Search";
 
 //for bottom tab navigation
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
 
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "transparent",
+          position: "absolute",
+          borderTopWidth: 0,
+          elevation: 0,
+        },
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -109,11 +120,18 @@ const Navigator = () => {
             <Stack.Screen
               name="HomeTab"
               component={TabNavigator}
-              options={{ headerShown: false }}
+              options={{
+                headerShown: false,
+              }}
             />
 
             <Stack.Screen name="Action" component={Action} />
             <Stack.Screen name="Edit" component={EditScreen} />
+            <Stack.Screen
+              name="Search"
+              component={Search}
+              options={{ headerShown: false }}
+            />
           </>
         )}
       </Stack.Navigator>
