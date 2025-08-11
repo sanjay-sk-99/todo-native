@@ -29,16 +29,13 @@ const ForgetPass = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={{ marginVertical: 50, marginHorizontal: 20 }}>
-        <TouchableOpacity
-          style={styles.customHeader}
-          onPress={() => navigation.goBack()}
-        >
+      <View style={styles.customHeader}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="caretleft" size={30} color="orange" />
-          <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-            Forget Password
-          </Text>
         </TouchableOpacity>
+        <Text style={{ fontSize: 19, fontWeight: "bold", marginLeft: 15 }}>
+          Search Todo
+        </Text>
       </View>
       {/* it will enable scrolling */}
       <ScrollView
@@ -131,7 +128,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomWidth: 2,
     borderColor: "gray",
-    paddingBottom: 15,
+    paddingBottom: 10,
+    marginTop: 40,
+    marginBottom: 10,
+    paddingLeft: 20,
+    alignItems: "center",
   },
 });
 

@@ -10,6 +10,7 @@ import {
 //import redux conectivity and state
 import { addTask, setTask, setEditIndex } from "../slices/features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
+import GradientLayout from "../GradientLayout";
 
 export default function Home({ navigation }) {
   const [todoError, setTodoError] = useState("");
@@ -53,60 +54,92 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Sanjay's Todo </Text>
-      <Text style={styles.title}>ToDo App</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="enter the todo"
-        value={task}
-        onChangeText={(text) => dispatch(setTask(text))}
-      />
-      {todoError && <Text style={styles.error}>{todoError}</Text>}
-      <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
-        <Text style={styles.addbtntext}>Add Task</Text>
-      </TouchableOpacity>
+    <GradientLayout>
+      <View style={styles.headingContainer}>
+        <Text style={styles.title}>Todo Creaters</Text>
+      </View>
 
-      <FlatList
-        data={mapedTask}
-        renderItem={renderItem}
-        keyExtractor={(i) => i.key}
-      />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.text}>Enter Todo</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter The Todo"
+          value={task}
+          onChangeText={(text) => dispatch(setTask(text))}
+        />
+        {todoError && <Text style={styles.error}>{todoError}</Text>}
+
+        <View style={styles.addBtnContainer}>
+          <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
+            <Text style={styles.addbtntext}>Add Task</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.taskHeader}>
+          <Text style={styles.taskHeaderTitle}>Added Tasks</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+            <Text style={styles.searchIcon}>🔍</Text>
+          </TouchableOpacity>
+        </View>
+
+        {allTask.length === 0 ? (
+          <View style={styles.noTaskContainer}>
+            <Text style={styles.noTaskText}>No Task Added</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={mapedTask}
+            renderItem={renderItem}
+            keyExtractor={(i) => i.key}
+          />
+        )}
+      </View>
+    </GradientLayout>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 40,
-    marginTop: 40,
+  },
+  headingContainer: {
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    paddingVertical: 8,
+    textAlign: "center",
+    color: "white",
   },
   text: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#DA70D6",
-    marginBottom: 7,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 8,
   },
   input: {
-    borderWidth: 3,
-    borderColor: "#ccc",
+    borderWidth: 1,
+    borderColor: "#fff",
     padding: 10,
-    marginBottom: 10,
+    marginBottom: 8,
     borderRadius: 10,
     fontSize: 18,
+  },
+  error: {
+    color: "red",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  addBtnContainer: {
+    alignItems: "center",
+    marginBottom: 16,
   },
   addbtn: {
     backgroundColor: "#DA70D6",
     padding: 8,
     borderRadius: 5,
-    marginBottom: 5,
+    width: 120,
   },
   addbtntext: {
     color: "#fff",
@@ -114,14 +147,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
   },
+  taskHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  taskHeaderTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  searchIcon: {
+    fontSize: 20,
+  },
+  noTaskContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noTaskText: {
+    fontSize: 18,
+    color: "#999",
+  },
   taskcontainer: {
     marginTop: 5,
   },
   tasklist: {
     alignItems: "center",
     justifyContent: "center",
-    height: 60,
-    width: 310,
+    paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 8,
     backgroundColor: "#fff",
@@ -130,12 +186,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+    marginBottom: 8,
   },
   taskitem: {
     fontSize: 18,
-  },
-  error: {
-    color: "red",
-    marginBottom: 5,
   },
 });
