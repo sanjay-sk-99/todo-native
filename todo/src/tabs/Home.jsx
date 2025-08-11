@@ -10,7 +10,7 @@ import {
 //import redux conectivity and state
 import { addTask, setTask, setEditIndex } from "../slices/features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
 
 export default function Home({ navigation }) {
   const [todoError, setTodoError] = useState("");

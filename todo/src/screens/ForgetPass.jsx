@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Header from "../components/Header";
 
 const ForgetPass = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -29,14 +29,8 @@ const ForgetPass = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.customHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="caretleft" size={30} color="orange" />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 19, fontWeight: "bold", marginLeft: 15 }}>
-          Search Todo
-        </Text>
-      </View>
+      {/* for custom heder */}
+      <Header title="Forget Password" navi={navigation} />
       {/* it will enable scrolling */}
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -123,16 +117,6 @@ const styles = StyleSheet.create({
     height: 400,
     alignItems: "center",
     justifyContent: "center",
-  },
-  customHeader: {
-    flexDirection: "row",
-    borderBottomWidth: 2,
-    borderColor: "gray",
-    paddingBottom: 10,
-    marginTop: 40,
-    marginBottom: 10,
-    paddingLeft: 20,
-    alignItems: "center",
   },
 });
 

@@ -9,6 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -32,7 +34,7 @@ const Login = ({ navigation }) => {
 
   // Fixed credentials for validation
   const validEmail = "sanjay@gmail.com";
-  const validPass = "sanjay@123";
+  const validPass = "sanjay";
 
   // Initial form values
   const initialValues = {
@@ -62,92 +64,90 @@ const Login = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {/* It will enable scrolling */}
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.container}
-      >
-        {/* This section contains full data for login form */}
-        <View style={styles.imgcontainer}>
-          <Image
-            source={require("../../assets/login-img.jpg")}
-            style={styles.img}
-          />
-        </View>
-
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+      {/* for dismissing keyboard */}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        {/* It will enable scrolling */}
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.container}
         >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-      
-          }) => (
-            <View style={styles.textContainer}>
-              <Text style={styles.heading}>Login</Text>
+          {/* This section contains full data for login form */}
+          <View style={styles.imgcontainer}>
+            <Image
+              source={require("../../assets/login-img.jpg")}
+              style={styles.img}
+            />
+          </View>
 
-              <TextInput
-                placeholder="Email Address"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                style={[
-                  styles.txtinput,
-                  touched.email && errors.email && styles.inputError,
-                ]}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View style={styles.textContainer}>
+                <Text style={styles.heading}>Login</Text>
 
-              <TextInput
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                style={[
-                  styles.txtinput,
-                  touched.password && errors.password && styles.inputError,
-                ]}
-                secureTextEntry
-              />
+                <TextInput
+                  placeholder="Email Address"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  style={[
+                    styles.txtinput,
+                    touched.email && errors.email && styles.inputError,
+                  ]}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
 
-               {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
+                <TextInput
+                  placeholder="Password"
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  style={[
+                    styles.txtinput,
+                    touched.password && errors.password && styles.inputError,
+                  ]}
+                  secureTextEntry
+                />
 
-              <TouchableOpacity
-                style={{ alignItems: "flex-end", marginTop: 8 }}
-                onPress={() => navigation.navigate("ForgetPass")}
-              >
-                <Text style={{ color: "cornflowerblue" }}>Forget Password ?</Text>
-              </TouchableOpacity>
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
 
-             
+                <TouchableOpacity
+                  style={{ alignItems: "flex-end", marginTop: 8 }}
+                  onPress={() => navigation.navigate("ForgetPass")}
+                >
+                  <Text style={{ color: "cornflowerblue" }}>
+                    Forget Password ?
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[
-                  styles.loginbtn,
-            
-                ]}
-                onPress={handleSubmit}
-               
-              >
-                <Text style={styles.btntext}>Login</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Formik>
-      </ScrollView>
+                <TouchableOpacity
+                  style={[styles.loginbtn]}
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.btntext}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

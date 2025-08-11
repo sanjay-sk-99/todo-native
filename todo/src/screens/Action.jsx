@@ -3,7 +3,7 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 //import redux conectivity and state
 import { setAllTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
 
 const Action = ({ navigation }) => {
   //get the state and dispatch function from redux store

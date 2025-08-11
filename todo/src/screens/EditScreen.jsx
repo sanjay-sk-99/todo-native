@@ -10,7 +10,7 @@ import { useState } from "react";
 //import redux conectivity and state
 import { updateTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
 
 const EditScreen = ({ navigation }) => {
   //get the state from redux store

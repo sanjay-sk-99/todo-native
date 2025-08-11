@@ -10,11 +10,11 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
+import Header from "../components/Header";
 
 const Search = ({ navigation }) => {
   const [text, setText] = useState("");
@@ -53,16 +53,7 @@ const Search = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ flex: 1 }}>
             {/*Custom Header */}
-            <View style={styles.customHeader}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <AntDesign name="caretleft" size={30} color="orange" />
-              </TouchableOpacity>
-              <Text
-                style={{ fontSize: 19, fontWeight: "bold", marginLeft: 15 }}
-              >
-                Search Todo
-              </Text>
-            </View>
+            <Header title={"Search Todo"} navi={navigation} />
 
             <View style={styles.inputContainer}>
               <TextInput
@@ -117,16 +108,6 @@ const Search = ({ navigation }) => {
 export default Search;
 
 const styles = StyleSheet.create({
-  customHeader: {
-    flexDirection: "row",
-    borderBottomWidth: 2,
-    borderColor: "gray",
-    paddingBottom: 10,
-    marginTop: 40,
-    marginBottom: 10,
-    paddingLeft: 20,
-    alignItems: "center",
-  },
   input: {
     flex: 1,
     fontSize: 18,

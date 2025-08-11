@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect } from "react";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
 
 const Joke = () => {
     //to check the screen is focused or not

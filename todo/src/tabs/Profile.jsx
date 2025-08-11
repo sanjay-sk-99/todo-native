@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 //for form handling
 import { Formik } from "formik";
 import * as Yup from "yup";
-import GradientLayout from "../GradientLayout";
+import GradientLayout from "../layouts/GradientLayout";
 
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
