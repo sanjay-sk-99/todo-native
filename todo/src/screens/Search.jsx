@@ -20,12 +20,28 @@ const Search = ({ navigation }) => {
   const [text, setText] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
   const { allTask } = useSelector((state) => state.todo);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const result = allTask.filter((task) =>
-      task.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredTodos(result);
+    //if text is empty need to set filterTodos is []
+    if (!text.trim()) {
+      setFilteredTodos([]);
+      return;
+    }
+    //show loading state when searching happens
+    setLoading(true);
+
+    //timer for debounce
+    const timer = setTimeout(() => {
+      const result = allTask.filter((task) =>
+        task.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredTodos(result);
+      setLoading(false);
+    }, 5000);
+
+    //clear timout when component unmount so the new timer will set each time
+    return () => clearTimeout(timer);
   }, [text, allTask]);
 
   return (
@@ -69,6 +85,10 @@ const Search = ({ navigation }) => {
             {text.length === 0 ? (
               <View style={styles.centeredView}>
                 <Text style={styles.infoText}>Enter the todo text</Text>
+              </View>
+            ) : loading ? (
+              <View style={styles.centeredView}>
+                <Text style={styles.infoText}>Searching....</Text>
               </View>
             ) : filteredTodos.length > 0 ? (
               <ScrollView style={{ marginHorizontal: 10 }}>
