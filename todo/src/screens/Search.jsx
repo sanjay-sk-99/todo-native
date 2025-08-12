@@ -13,8 +13,11 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+//import layout
 import GradientLayout from "../layouts/GradientLayout";
+//import reusable component
 import Header from "../components/Header";
+import TaskList from "../components/TaskList";
 
 const Search = ({ navigation }) => {
   const [text, setText] = useState("");
@@ -84,13 +87,11 @@ const Search = ({ navigation }) => {
             ) : filteredTodos.length > 0 ? (
               <ScrollView style={{ marginHorizontal: 10 }}>
                 {filteredTodos.map((item, index) => (
-                  <TouchableOpacity
+                  <TaskList
                     key={index}
-                    style={styles.todoItem}
+                    text={item}
                     onPress={() => navigation.navigate("Action")}
-                  >
-                    <Text style={styles.todoText}>{item}</Text>
-                  </TouchableOpacity>
+                  />
                 ))}
               </ScrollView>
             ) : (
@@ -122,23 +123,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginBottom: 10,
     paddingHorizontal: 10,
-  },
-  todoItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    marginBottom: 8,
-  },
-  todoText: {
-    fontSize: 18,
   },
   noDataText: {
     fontSize: 20,

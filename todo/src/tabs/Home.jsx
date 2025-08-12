@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import GradientLayout from "../layouts/GradientLayout";
 //import redux conectivity and state
 import { addTask, setTask, setEditIndex } from "../slices/features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
-import GradientLayout from "../layouts/GradientLayout";
+//import reusable component
+import TaskList from "../components/TaskList";
 
 export default function Home({ navigation }) {
   const [todoError, setTodoError] = useState("");
@@ -36,21 +38,10 @@ export default function Home({ navigation }) {
     key: i.toString(),
   }));
 
-  //render function for flatlist
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.taskcontainer}>
-        <TouchableOpacity
-          style={styles.tasklist}
-          onPress={() => {
-            dispatch(setEditIndex(item.index));
-            navigation.navigate("Action");
-          }}
-        >
-          <Text style={styles.taskitem}>{item.task}</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  //for tasklisk component
+  const handlePress = (index) => {
+    dispatch(setEditIndex(index));
+    navigation.navigate("Action");
   };
 
   return (
@@ -89,7 +80,12 @@ export default function Home({ navigation }) {
         ) : (
           <FlatList
             data={mapedTask}
-            renderItem={renderItem}
+            renderItem={({ item }) => (
+              <TaskList
+                text={item.task}
+                onPress={() => handlePress(item.index)}
+              />
+            )}
             keyExtractor={(i) => i.key}
           />
         )}
@@ -173,22 +169,5 @@ const styles = StyleSheet.create({
   },
   taskcontainer: {
     marginTop: 5,
-  },
-  tasklist: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    marginBottom: 8,
-  },
-  taskitem: {
-    fontSize: 18,
   },
 });
