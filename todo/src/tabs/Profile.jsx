@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Modal,
+  Keyboard,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/profile.png";
@@ -26,6 +27,22 @@ import GradientLayout from "../layouts/GradientLayout";
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [modelVisible, setModelVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  //for handling keyboard with bottom spaces
+  useEffect(() => {
+    const keyboardDidShow = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const keyboardDidHide = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      keyboardDidShow.remove();
+      keyboardDidHide.remove();
+    };
+  }, []);
 
   //for triiger reducer function
   const dispatch = useDispatch();
@@ -116,158 +133,148 @@ const Profile = () => {
         </View>
       </Modal>
 
-      {/* for overlapping the keyboard when we press input */}
-      <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: "#fff" }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 70}
+      {/* it will enable scrolling */}
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: keyboardHeight }}
       >
-        {/* it will enable scrolling */}
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
-          <GradientLayout>
-            <View style={styles.container}>
-              <View style={styles.btncontainer}>
-                <TouchableOpacity
-                  style={styles.logoutbtn}
-                  onPress={() => setModelVisible(true)}
-                >
-                  <Text style={styles.btntext}>Logout</Text>
-                </TouchableOpacity>
+        <GradientLayout>
+          <View style={styles.container}>
+            <View style={styles.btncontainer}>
+              <TouchableOpacity
+                style={styles.logoutbtn}
+                onPress={() => setModelVisible(true)}
+              >
+                <Text style={styles.btntext}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.card}>
+              <View style={styles.profileImageContainer}>
+                {profileImage ? (
+                  <Image
+                    source={{ uri: profileImage }}
+                    style={styles.profileImage}
+                  />
+                ) : (
+                  <Image source={profile} style={{ height: 100, width: 100 }} />
+                )}
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    style={styles.imageButton}
+                    onPress={takePhoto}
+                  >
+                    <Text style={styles.imageButtonText}>Take Photo</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.imageButton}
+                    onPress={pickImageFromGallery}
+                  >
+                    <Text style={styles.imageButtonText}>Choose Gallery</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
-              <View style={styles.card}>
-                <View style={styles.profileImageContainer}>
-                  {profileImage ? (
-                    <Image
-                      source={{ uri: profileImage }}
-                      style={styles.profileImage}
+              {/* User Info */}
+              <Formik
+                initialValues={{
+                  name: "",
+                  email: "",
+                  phone: "",
+                }}
+                validationSchema={profileSchema}
+                onSubmit={(values) => {
+                  Alert.alert(
+                    "Profile Updated",
+                    JSON.stringify(values, null, 2)
+                  );
+                }}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  errors,
+                  touched,
+                }) => (
+                  <View style={styles.userInfo}>
+                    <Text style={styles.infoText}>Name :</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Name"
+                      value={values.name}
+                      onChangeText={handleChange("name")}
+                      onBlur={handleBlur("name")}
+                      
+                       scrollEnabled={false}
                     />
-                  ) : (
-                    <Image
-                      source={profile}
-                      style={{ height: 100, width: 100 }}
+                    {touched.name && errors.name && (
+                      <Text style={styles.error}>{errors.name}</Text>
+                    )}
+
+                    <Text style={styles.infoText}>Gmail : </Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Email"
+                      value={values.email}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      keyboardType="email-address"
                     />
-                  )}
-                  <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity
-                      style={styles.imageButton}
-                      onPress={takePhoto}
-                    >
-                      <Text style={styles.imageButtonText}>Take Photo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.imageButton}
-                      onPress={pickImageFromGallery}
-                    >
-                      <Text style={styles.imageButtonText}>Choose Gallery</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                    {touched.email && errors.email && (
+                      <Text style={styles.error}>{errors.email}</Text>
+                    )}
 
-                {/* User Info */}
-                <Formik
-                  initialValues={{
-                    name: "",
-                    email: "",
-                    phone: "",
-                  }}
-                  validationSchema={profileSchema}
-                  onSubmit={(values) => {
-                    Alert.alert(
-                      "Profile Updated",
-                      JSON.stringify(values, null, 2)
-                    );
-                  }}
-                >
-                  {({
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    values,
-                    errors,
-                    touched,
-                  }) => (
-                    <View style={styles.userInfo}>
-                      <Text style={styles.infoText}>Name :</Text>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Name"
-                        value={values.name}
-                        onChangeText={handleChange("name")}
-                        onBlur={handleBlur("name")}
-                      />
-                      {touched.name && errors.name && (
-                        <Text style={styles.error}>{errors.name}</Text>
-                      )}
+                    <Text style={styles.infoText}>Phone No :</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Phone"
+                      value={values.phone}
+                      onChangeText={handleChange("phone")}
+                      onBlur={handleBlur("phone")}
+                      keyboardType="phone-pad"
+                    />
+                    {touched.phone && errors.phone && (
+                      <Text style={styles.error}>{errors.phone}</Text>
+                    )}
 
-                      <Text style={styles.infoText}>Gmail : </Text>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        value={values.email}
-                        onChangeText={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        keyboardType="email-address"
-                      />
-                      {touched.email && errors.email && (
-                        <Text style={styles.error}>{errors.email}</Text>
-                      )}
-
-                      <Text style={styles.infoText}>Phone No :</Text>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Phone"
-                        value={values.phone}
-                        onChangeText={handleChange("phone")}
-                        onBlur={handleBlur("phone")}
-                        keyboardType="phone-pad"
-                      />
-                      {touched.phone && errors.phone && (
-                        <Text style={styles.error}>{errors.phone}</Text>
-                      )}
-
-                      <View style={styles.linkContainer}>
-                        <Text style={styles.infoText}>GitHub profile : </Text>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleExternalLink(
-                              "https://github.com/sanjay-sk-99"
-                            )
-                          }
-                        >
-                          <Text style={styles.link}>Click Here</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.linkContainer}>
-                        <Text style={styles.infoText}>LinkedIn profile : </Text>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleExternalLink(
-                              "https://www.linkedin.com/in/99-sanjay-kumar/"
-                            )
-                          }
-                        >
-                          <Text style={styles.link}>Click Here</Text>
-                        </TouchableOpacity>
-                      </View>
-
+                    <View style={styles.linkContainer}>
+                      <Text style={styles.infoText}>GitHub profile : </Text>
                       <TouchableOpacity
-                        style={styles.updateBtn}
-                        onPress={handleSubmit}
+                        onPress={() =>
+                          handleExternalLink("https://github.com/sanjay-sk-99")
+                        }
                       >
-                        <Text style={styles.updateText}>Update Profile</Text>
+                        <Text style={styles.link}>Click Here</Text>
                       </TouchableOpacity>
                     </View>
-                  )}
-                </Formik>
-              </View>
+                    <View style={styles.linkContainer}>
+                      <Text style={styles.infoText}>LinkedIn profile : </Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleExternalLink(
+                            "https://www.linkedin.com/in/99-sanjay-kumar/"
+                          )
+                        }
+                      >
+                        <Text style={styles.link}>Click Here</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity
+                      style={styles.updateBtn}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.updateText}>Update Profile</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </Formik>
             </View>
-          </GradientLayout>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </View>
+        </GradientLayout>
+      </ScrollView>
     </>
   );
 };
@@ -308,7 +315,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   imageButton: {
-    borderWidth:1,
+    borderWidth: 1,
     padding: 10,
     margin: 10,
     borderRadius: 5,
@@ -371,9 +378,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalBox: {
-    width: 300,
     backgroundColor: "#fff",
     padding: 24,
+    paddingHorizontal: 70,
     borderRadius: 12,
     elevation: 5,
   },
