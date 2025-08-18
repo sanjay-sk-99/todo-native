@@ -4,6 +4,7 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import { setAllTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import GradientLayout from "../layouts/GradientLayout";
+import Header from "../components/Header";
 
 const Action = ({ navigation }) => {
   //get the state and dispatch function from redux store
@@ -22,6 +23,7 @@ const Action = ({ navigation }) => {
   };
   return (
     <GradientLayout>
+      <Header title={"Action"} navi={navigation}/>
       <View style={styles.container}>
         <Text style={styles.title}>Actions</Text>
 

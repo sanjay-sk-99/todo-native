@@ -9,8 +9,6 @@ import {
   Image,
   Alert,
   ScrollView,
-  Platform,
-  KeyboardAvoidingView,
   Modal,
   Keyboard,
 } from "react-native";
@@ -23,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import GradientLayout from "../layouts/GradientLayout";
+import LottieView from "lottie-react-native";
 
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -116,17 +115,41 @@ const Profile = () => {
       >
         <View style={styles.overlay}>
           <View style={styles.modalBox}>
-            <Text style={styles.title}>Are you sure?</Text>
-
-            <View style={styles.buttonRow}>
+            <LottieView
+              autoPlay
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("../../assets/Log out.json")}
+            />
+            <Text
+              style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18 }}
+            >
+              Cancel
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                marginBottom: 10,
+                color: "gray",
+                fontSize: 16,
+              }}
+            >
+              Are you sure you want to logout the todo app?
+            </Text>
+            <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
+                style={styles.modelButton}
                 onPress={() => setModelVisible(false)}
-                style={styles.cancelBtn}
               >
-                <Text style={styles.cancelText}>Cancel</Text>
+                <Text>cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleLogout} style={styles.deleteBtn}>
-                <Text style={styles.deleteText}>Logout</Text>
+              <TouchableOpacity
+                onPress={handleLogout}
+                style={[styles.modelButton, styles.modelYesButton]}
+              >
+                <Text>logout</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -206,8 +229,7 @@ const Profile = () => {
                       value={values.name}
                       onChangeText={handleChange("name")}
                       onBlur={handleBlur("name")}
-                      
-                       scrollEnabled={false}
+                      scrollEnabled={false}
                     />
                     {touched.name && errors.name && (
                       <Text style={styles.error}>{errors.name}</Text>
@@ -380,9 +402,25 @@ const styles = StyleSheet.create({
   modalBox: {
     backgroundColor: "#fff",
     padding: 24,
-    paddingHorizontal: 70,
+    // paddingHorizontal: 70,
+    marginHorizontal: 20,
     borderRadius: 12,
     elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modelButton: {
+    borderColor: "#df5858ff",
+    borderWidth: 1,
+    paddingHorizontal: 50,
+    paddingVertical: 10,
+    borderRadius: 25,
+    marginHorizontal: 5,
+  },
+  modelYesButton: {
+    backgroundColor: "#f4af19ff",
+    shadowColor: "#d14848ff",
+    elevation: 8,
   },
   title: {
     fontSize: 20,
@@ -392,6 +430,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    alignItems: "center",
   },
   cancelBtn: {
     marginRight: 12,

@@ -17,6 +17,7 @@ import * as Yup from "yup";
 //import redux connectivity and state
 import { useDispatch } from "react-redux";
 import { logIn } from "../slices/features/authSlice";
+import LottieView from "lottie-react-native";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -63,6 +64,7 @@ const Login = ({ navigation }) => {
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 70}
     >
       {/* for dismissing keyboard */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -73,9 +75,13 @@ const Login = ({ navigation }) => {
         >
           {/* This section contains full data for login form */}
           <View style={styles.imgcontainer}>
-            <Image
-              source={require("../../assets/login-img.jpg")}
-              style={styles.img}
+            <LottieView
+              autoPlay
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("../../assets/register.json")}
             />
           </View>
 
@@ -164,12 +170,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#DA70D6",
     marginBottom: 10,
-  },
-  img: {
-    width: 200,
-    height: 200,
-    resizeMode: "cover",
-    borderRadius: 8,
   },
   imgcontainer: {
     alignItems: "center",

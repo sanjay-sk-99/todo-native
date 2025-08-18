@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import Header from "../components/Header";
+import LottieView from "lottie-react-native";
 
 const ForgetPass = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -39,9 +40,13 @@ const ForgetPass = ({ navigation }) => {
         {/* this section contain full data for reset form */}
         <View>
           <View style={styles.imgcontainer}>
-            <Image
-              source={require("../../assets/login-img.jpg")}
-              style={styles.img}
+            <LottieView
+              autoPlay
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("../../assets/login.json")}
             />
           </View>
           <View style={styles.textContainer}>

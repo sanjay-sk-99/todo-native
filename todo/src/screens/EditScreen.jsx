@@ -11,6 +11,7 @@ import { useState } from "react";
 import { updateTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import GradientLayout from "../layouts/GradientLayout";
+import Header from "../components/Header";
 
 const EditScreen = ({ navigation }) => {
   //get the state from redux store
@@ -31,6 +32,7 @@ const EditScreen = ({ navigation }) => {
 
   return (
     <GradientLayout>
+      <Header title={"Edit"} navi={navigation} />
       <View style={styles.container}>
         <TextInput
           style={styles.input}

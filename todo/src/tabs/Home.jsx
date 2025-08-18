@@ -46,34 +46,36 @@ export default function Home({ navigation }) {
 
   return (
     <GradientLayout>
-      <View style={styles.headingContainer}>
-        <Text style={styles.title}>Todo Creaters</Text>
-      </View>
-
       <View style={styles.container}>
-        <Text style={styles.text}>Enter Todo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter The Todo"
-          value={task}
-          onChangeText={(text) => dispatch(setTask(text))}
-        />
-        {todoError && <Text style={styles.error}>{todoError}</Text>}
-
-        <View style={styles.addBtnContainer}>
-          <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
-            <Text style={styles.addbtntext}>Add Task</Text>
-          </TouchableOpacity>
+        <View style={styles.headingContainer}>
+          <Text style={styles.title}>Todo Creaters</Text>
         </View>
 
-        <View style={styles.taskHeader}>
-          <Text style={styles.taskHeaderTitle}>Added Tasks</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-            <Text style={styles.searchIcon}>🔍</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.inputcontainer}>
+          <Text style={styles.text}>Enter Todo</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter The Todo"
+            value={task}
+            onChangeText={(text) => dispatch(setTask(text))}
+          />
+          {todoError && <Text style={styles.error}>{todoError}</Text>}
 
-        {allTask.length === 0 ? (
+          <View style={styles.addBtnContainer}>
+            <TouchableOpacity style={styles.addbtn} onPress={handleTask}>
+              <Text style={styles.addbtntext}>Add Task</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.tasklistContainer}>
+          <View style={styles.taskHeader}>
+            <Text style={styles.taskHeaderTitle}>Added Tasks</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+              <Text style={styles.searchIcon}>🔍</Text>
+            </TouchableOpacity>
+          </View>
+
+          {allTask.length === 0 ? (
           <View style={styles.noTaskContainer}>
             <Text style={styles.noTaskText}>No Task Added</Text>
           </View>
@@ -87,8 +89,14 @@ export default function Home({ navigation }) {
               />
             )}
             keyExtractor={(i) => i.key}
+            // ListEmptyComponent={
+            //   <View style={styles.noTaskContainer}>
+            //     <Text style={styles.noTaskText}>No Task Added</Text>
+            //   </View>
+            // }
           />
-        )}
+          )}
+        </View>
       </View>
     </GradientLayout>
   );
@@ -100,6 +108,13 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     marginBottom: 8,
+  },
+  // inputcontainer: {
+  //   borderColor: "black",
+  //   borderWidth: 2,
+  // },
+  tasklistContainer: {
+    flex: 0.8,
   },
   title: {
     fontSize: 24,
@@ -159,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   noTaskContainer: {
-    flex: 1,
+     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

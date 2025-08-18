@@ -44,6 +44,7 @@ const TabNavigator = () => {
             <Image source={home} style={{ height: 30, width: 30 }} />
           ),
           tabBarActiveTintColor: "#DA70D6",
+          // headerShown: false,
         }}
       />
       <Tab.Screen
@@ -110,7 +111,6 @@ const Navigator = () => {
               name="ForgetPass"
               component={ForgetPass}
               options={{
-                title: "Forget Password",
                 headerShown: false,
               }}
             />
@@ -125,8 +125,16 @@ const Navigator = () => {
               }}
             />
 
-            <Stack.Screen name="Action" component={Action} />
-            <Stack.Screen name="Edit" component={EditScreen} />
+            <Stack.Screen
+              name="Action"
+              component={Action}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Edit"
+              component={EditScreen}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Search"
               component={Search}
