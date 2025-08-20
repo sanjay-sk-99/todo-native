@@ -13,7 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import GradientLayout from "../layouts/GradientLayout";
 import Header from "../components/Header";
 
+import { useTheme } from "@react-navigation/native";
+
 const EditScreen = ({ navigation }) => {
+
+    const {colors}=useTheme()
+    
   //get the state from redux store
   const { editIndex, allTask } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
@@ -35,7 +40,7 @@ const EditScreen = ({ navigation }) => {
       <Header title={"Edit"} navi={navigation} />
       <View style={styles.container}>
         <TextInput
-          style={styles.input}
+          style={[styles.input,{color:colors.text}]}
           value={newTask}
           onChangeText={(text) => setNewTask(text)}
           multiline

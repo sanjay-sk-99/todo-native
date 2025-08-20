@@ -5,11 +5,14 @@ import { setAllTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import GradientLayout from "../layouts/GradientLayout";
 import Header from "../components/Header";
+import { useTheme } from "@react-navigation/native";
 
 const Action = ({ navigation }) => {
   //get the state and dispatch function from redux store
   const { allTask, editIndex } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
+
+  const {colors} = useTheme()
 
   //store the task name for deleting
   const taskname = allTask[editIndex];
@@ -25,7 +28,7 @@ const Action = ({ navigation }) => {
     <GradientLayout>
       <Header title={"Action"} navi={navigation}/>
       <View style={styles.container}>
-        <Text style={styles.title}>Actions</Text>
+        <Text style={[styles.title,{color:colors.text}]}>Actions</Text>
 
         <View style={[styles.taskcontainer]}>
           <View>

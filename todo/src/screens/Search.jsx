@@ -19,12 +19,17 @@ import GradientLayout from "../layouts/GradientLayout";
 import Header from "../components/Header";
 import TaskList from "../components/TaskList";
 
+import { useTheme } from "@react-navigation/native";
+
 const Search = ({ navigation }) => {
   const [text, setText] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
   const { allTask } = useSelector((state) => state.todo);
   const [loading, setLoading] = useState(false);
 
+  const {colors}=useTheme()
+  const styles = makestyles(colors)
+  
   useEffect(() => {
     //if text is empty need to set filterTodos is []
     if (!text.trim()) {
@@ -62,6 +67,7 @@ const Search = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Enter The Todo"
+                placeholderTextColor={colors.text}
                 value={text}
                 onChangeText={(text) => setText(text)}
               />
@@ -108,11 +114,12 @@ const Search = ({ navigation }) => {
 
 export default Search;
 
-const styles = StyleSheet.create({
+const makestyles =(color)=> StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
     paddingVertical: 10,
+    color:color.text
   },
   inputContainer: {
     flexDirection: "row",
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 18,
-    color: "gray",
+    color: color.grayText,
     marginTop: 20,
   },
 });

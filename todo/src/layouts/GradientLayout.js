@@ -1,12 +1,13 @@
 // GradientLayout.js
-import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet } from 'react-native';
+import { useTheme } from "@react-navigation/native";
 
 const GradientLayout = ({ children }) => {
+    const { gradient } = useTheme();
   return (
     <LinearGradient
-      colors={["rgba(238, 174, 202, 1)", "rgba(148, 187, 233, 1)"]}
+      colors={gradient.background}
       start={{ x: 0.5, y: 0.5 }} // center
       end={{ x: 1, y: 1 }}       // radiate out
       style={styles.container}

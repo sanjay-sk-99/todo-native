@@ -11,22 +11,30 @@ import {
   ScrollView,
   Modal,
   Keyboard,
+  Switch,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/profile.png";
 //import redux conectivity and state
 import { logOut } from "../slices/features/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 //for form handling
 import { Formik } from "formik";
 import * as Yup from "yup";
 import GradientLayout from "../layouts/GradientLayout";
 import LottieView from "lottie-react-native";
+import { useTheme } from "@react-navigation/native";
+import { toggleTheme } from "../slices/features/themeSlice";
 
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [modelVisible, setModelVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+ const { isDark } = useSelector((state) => state.theme);
+
+  const { colors } = useTheme();
+  const styles = makestyles(colors);
 
   //for handling keyboard with bottom spaces
   useEffect(() => {
@@ -42,6 +50,8 @@ const Profile = () => {
       keyboardDidHide.remove();
     };
   }, []);
+
+
 
   //for triiger reducer function
   const dispatch = useDispatch();
@@ -132,7 +142,7 @@ const Profile = () => {
               style={{
                 textAlign: "center",
                 marginBottom: 10,
-                color: "gray",
+                color: colors.grayText,
                 fontSize: 16,
               }}
             >
@@ -143,13 +153,13 @@ const Profile = () => {
                 style={styles.modelButton}
                 onPress={() => setModelVisible(false)}
               >
-                <Text>cancel</Text>
+                <Text style={{ color: colors.text }}>cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleLogout}
                 style={[styles.modelButton, styles.modelYesButton]}
               >
-                <Text>logout</Text>
+                <Text style={{ color: colors.text }}>logout</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -164,6 +174,30 @@ const Profile = () => {
         <GradientLayout>
           <View style={styles.container}>
             <View style={styles.btncontainer}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Theme: {isDark ? "On" : "Off"}
+                </Text>
+                <Switch
+                  onValueChange={()=>dispatch(toggleTheme())}
+                  value={isDark}
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isDark ? "#f5dd4b" : "#f4f3f4"}
+                />
+              </View>
+
               <TouchableOpacity
                 style={styles.logoutbtn}
                 onPress={() => setModelVisible(true)}
@@ -226,6 +260,7 @@ const Profile = () => {
                     <TextInput
                       style={styles.input}
                       placeholder="Name"
+                      placeholderTextColor={colors.text}
                       value={values.name}
                       onChangeText={handleChange("name")}
                       onBlur={handleBlur("name")}
@@ -239,6 +274,7 @@ const Profile = () => {
                     <TextInput
                       style={styles.input}
                       placeholder="Email"
+                      placeholderTextColor={colors.text}
                       value={values.email}
                       onChangeText={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -252,6 +288,7 @@ const Profile = () => {
                     <TextInput
                       style={styles.input}
                       placeholder="Phone"
+                      placeholderTextColor={colors.text}
                       value={values.phone}
                       onChangeText={handleChange("phone")}
                       onBlur={handleBlur("phone")}
@@ -303,151 +340,157 @@ const Profile = () => {
 
 export default Profile;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  btncontainer: {
-    alignItems: "flex-end",
-    marginBottom: 10,
-  },
-  logoutbtn: {
-    borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "red",
-    borderRadius: 5,
-    padding: 8,
-    width: 100,
-  },
-  btntext: {
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 15,
-    color: "#fff",
-  },
-  profileImageContainer: {
-    marginVertical: 20,
-    alignItems: "center",
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 10,
-  },
-  imageButton: {
-    borderWidth: 1,
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  imageButtonText: {
-    color: "black",
-    fontWeight: "bold",
-  },
-  link: {
-    color: "blue",
-    textDecorationLine: "underline",
-  },
-  linkContainer: {
-    flexDirection: "row",
-  },
-  card: {
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: "#fff",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  userInfo: {
-    marginTop: 10,
-  },
-  infoText: {
-    fontSize: 16,
-    marginBottom: 5,
-    fontWeight: "bold",
-  },
-  input: {
-    borderColor: "#fff",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  error: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  updateBtn: {
-    backgroundColor: "#28a745",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  updateText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBox: {
-    backgroundColor: "#fff",
-    padding: 24,
-    // paddingHorizontal: 70,
-    marginHorizontal: 20,
-    borderRadius: 12,
-    elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modelButton: {
-    borderColor: "#df5858ff",
-    borderWidth: 1,
-    paddingHorizontal: 50,
-    paddingVertical: 10,
-    borderRadius: 25,
-    marginHorizontal: 5,
-  },
-  modelYesButton: {
-    backgroundColor: "#f4af19ff",
-    shadowColor: "#d14848ff",
-    elevation: 8,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  cancelBtn: {
-    marginRight: 12,
-  },
-  cancelText: {
-    color: "#555",
-    fontSize: 16,
-  },
-  deleteBtn: {
-    backgroundColor: "#FF4D4F",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-  },
-  deleteText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+const makestyles = (color) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingHorizontal: 20,
+    },
+    btncontainer: {
+      flexDirection: "row",
+      // alignItems: "flex-end",
+      justifyContent: "space-between",
+      marginBottom: 10,
+    },
+    logoutbtn: {
+      borderWidth: 2,
+      borderColor: color.text,
+      backgroundColor: "red",
+      borderRadius: 5,
+      padding: 8,
+      width: 100,
+    },
+    btntext: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 15,
+      color: color.text,
+    },
+    profileImageContainer: {
+      marginVertical: 20,
+      alignItems: "center",
+    },
+    profileImage: {
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+      marginBottom: 10,
+    },
+    imageButton: {
+      borderColor: color.text,
+      borderWidth: 1,
+      padding: 10,
+      margin: 10,
+      borderRadius: 5,
+    },
+    imageButtonText: {
+      color: color.text,
+      fontWeight: "bold",
+    },
+    link: {
+      color: "blue",
+      textDecorationLine: "underline",
+    },
+    linkContainer: {
+      flexDirection: "row",
+    },
+    card: {
+      borderRadius: 10,
+      padding: 20,
+      shadowColor: "#fff",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    userInfo: {
+      marginTop: 10,
+    },
+    infoText: {
+      color: color.text,
+      fontSize: 16,
+      marginBottom: 5,
+      fontWeight: "bold",
+    },
+    input: {
+      color: color.text,
+      borderColor: color.text,
+      borderWidth: 1,
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 10,
+    },
+    error: {
+      color: "red",
+      fontSize: 12,
+      marginBottom: 5,
+    },
+    updateBtn: {
+      backgroundColor: "#28a745",
+      padding: 10,
+      borderRadius: 5,
+      marginTop: 10,
+    },
+    updateText: {
+      color: "#fff",
+      textAlign: "center",
+      fontWeight: "bold",
+    },
+    overlay: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.4)",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modalBox: {
+      backgroundColor: color.background,
+      padding: 24,
+      // paddingHorizontal: 70,
+      marginHorizontal: 20,
+      borderRadius: 12,
+      elevation: 5,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modelButton: {
+      borderColor: "#df5858ff",
+      borderWidth: 1,
+      paddingHorizontal: 50,
+      paddingVertical: 10,
+      borderRadius: 25,
+      marginHorizontal: 5,
+    },
+    modelYesButton: {
+      backgroundColor: "#f4af19ff",
+      shadowColor: "#d14848ff",
+      elevation: 8,
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: "bold",
+      marginBottom: 12,
+    },
+    buttonRow: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      alignItems: "center",
+    },
+    cancelBtn: {
+      marginRight: 12,
+    },
+    cancelText: {
+      color: color.Text,
+      fontSize: 16,
+    },
+    deleteBtn: {
+      backgroundColor: "#FF4D4F",
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 6,
+    },
+    deleteText: {
+      color: color.Text,
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+  });
