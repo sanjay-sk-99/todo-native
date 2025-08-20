@@ -10,7 +10,8 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Header from "../components/Header";
+import LottieView from "lottie-react-native";
 
 const ForgetPass = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -29,17 +30,8 @@ const ForgetPass = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={{ marginVertical: 50, marginHorizontal: 20 }}>
-        <TouchableOpacity
-          style={styles.customHeader}
-          onPress={() => navigation.goBack()}
-        >
-          <AntDesign name="caretleft" size={30} color="orange" />
-          <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-            Forget Password
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* for custom heder */}
+      <Header title="Forget Password" navi={navigation} />
       {/* it will enable scrolling */}
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -48,9 +40,13 @@ const ForgetPass = ({ navigation }) => {
         {/* this section contain full data for reset form */}
         <View>
           <View style={styles.imgcontainer}>
-            <Image
-              source={require("../../assets/login-img.jpg")}
-              style={styles.img}
+            <LottieView
+              autoPlay
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("../../assets/login.json")}
             />
           </View>
           <View style={styles.textContainer}>
@@ -126,12 +122,6 @@ const styles = StyleSheet.create({
     height: 400,
     alignItems: "center",
     justifyContent: "center",
-  },
-  customHeader: {
-    flexDirection: "row",
-    borderBottomWidth: 2,
-    borderColor: "gray",
-    paddingBottom: 15,
   },
 });
 

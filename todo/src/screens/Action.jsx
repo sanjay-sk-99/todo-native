@@ -3,11 +3,16 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 //import redux conectivity and state
 import { setAllTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
+import GradientLayout from "../layouts/GradientLayout";
+import Header from "../components/Header";
+import { useTheme } from "@react-navigation/native";
 
 const Action = ({ navigation }) => {
   //get the state and dispatch function from redux store
   const { allTask, editIndex } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
+
+  const {colors} = useTheme()
 
   //store the task name for deleting
   const taskname = allTask[editIndex];
@@ -17,31 +22,34 @@ const Action = ({ navigation }) => {
     const filterTask = allTask.filter((task) => task != taskname);
     dispatch(setAllTask(filterTask));
     //after deleting navigate to home screen
-    navigation.pop();
+    navigation.popToTop();
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Actions</Text>
+    <GradientLayout>
+      <Header title={"Action"} navi={navigation}/>
+      <View style={styles.container}>
+        <Text style={[styles.title,{color:colors.text}]}>Actions</Text>
 
-      <View style={[styles.taskcontainer]}>
-        <View>
-          <Text style={styles.text} numberOfLines={1}>
-            {taskname}
-          </Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Edit")}
-            style={{ marginRight: 15 }}
-          >
-            <Feather name="edit" size={24} color="green" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(taskname)}>
-            <AntDesign name="delete" size={24} color="red" />
-          </TouchableOpacity>
+        <View style={[styles.taskcontainer]}>
+          <View>
+            <Text style={styles.text} numberOfLines={1}>
+              {taskname}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Edit")}
+              style={{ marginRight: 15 }}
+            >
+              <Feather name="edit" size={24} color="green" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDelete(taskname)}>
+              <AntDesign name="delete" size={24} color="red" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </GradientLayout>
   );
 };
 
@@ -57,8 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 60,
-    width: 300,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
     backgroundColor: "#fff",
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#DA70D6",
-    maxWidth: 200, 
+    maxWidth: 200,
   },
   title: {
     fontSize: 24,

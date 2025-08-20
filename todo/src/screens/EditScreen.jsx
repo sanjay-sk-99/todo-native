@@ -6,14 +6,20 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import {useState } from "react";
+import { useState } from "react";
 //import redux conectivity and state
 import { updateTask } from "../slices/features/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
+import GradientLayout from "../layouts/GradientLayout";
+import Header from "../components/Header";
 
+import { useTheme } from "@react-navigation/native";
 
 const EditScreen = ({ navigation }) => {
-  //get the state and dispatch function from redux store
+
+    const {colors}=useTheme()
+    
+  //get the state from redux store
   const { editIndex, allTask } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
 
@@ -22,25 +28,28 @@ const EditScreen = ({ navigation }) => {
   const [newTask, setNewTask] = useState(taskname);
 
   const handleUpdateTask = () => {
-    if(!newTask.trim()){
-      return Alert.alert("please Enter Todo")
+    if (!newTask.trim()) {
+      return Alert.alert("please Enter Todo");
     }
     dispatch(updateTask({ index: editIndex, value: newTask }));
-    navigation.popToTop()
+    navigation.popToTop();
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={newTask}
-        onChangeText={(text) => setNewTask(text)}
-        multiline
-      />
-      <TouchableOpacity style={styles.addbtn} onPress={handleUpdateTask}>
-        <Text style={styles.addbtntext}>Update Task</Text>
-      </TouchableOpacity>
-    </View>
+    <GradientLayout>
+      <Header title={"Edit"} navi={navigation} />
+      <View style={styles.container}>
+        <TextInput
+          style={[styles.input,{color:colors.text}]}
+          value={newTask}
+          onChangeText={(text) => setNewTask(text)}
+          multiline
+        />
+        <TouchableOpacity style={styles.addbtn} onPress={handleUpdateTask}>
+          <Text style={styles.addbtntext}>Update Task</Text>
+        </TouchableOpacity>
+      </View>
+    </GradientLayout>
   );
 };
 

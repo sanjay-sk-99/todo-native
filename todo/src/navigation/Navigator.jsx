@@ -11,6 +11,7 @@ import Profile from "../../src/tabs/Profile";
 import Joke from "../../src/tabs/Joke";
 import Action from "../../src/screens/Action";
 import EditScreen from "../../src/screens/EditScreen";
+import Search from "../screens/Search";
 //import images
 import home from "../../assets/home.png";
 import profile from "../../assets/profile.png";
@@ -19,12 +20,23 @@ import joke from "../../assets/joke.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { loadToken } from "../slices/features/authSlice";
 
+import { StatusBar } from "expo-status-bar";
 //for bottom tab navigation
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
 
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "transparent",
+          position: "absolute",
+          borderTopWidth: 0,
+          elevation: 0,
+        },
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -33,6 +45,7 @@ const TabNavigator = () => {
             <Image source={home} style={{ height: 30, width: 30 }} />
           ),
           tabBarActiveTintColor: "#DA70D6",
+          // headerShown: false,
         }}
       />
       <Tab.Screen
@@ -62,6 +75,9 @@ const TabNavigator = () => {
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
+  
+  //theme from redux
+  const { theme, isDark } = useSelector((state) => state.theme);
 
   //token and loading state from redux
   const dispatch = useDispatch();
@@ -89,35 +105,52 @@ const Navigator = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {token == null ? (
-          <>
-            <Stack.Screen name="Login" component={Login} />
+    <>
+      <NavigationContainer theme={theme}>
+        <StatusBar style={isDark ? "light" : "dark"} translucent />
+        <Stack.Navigator>
+          {token == null ? (
+            <>
+              <Stack.Screen name="Login" component={Login} />
 
-            <Stack.Screen
-              name="ForgetPass"
-              component={ForgetPass}
-              options={{
-                title: "Forget Password",
-                headerShown: false,
-              }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="HomeTab"
-              component={TabNavigator}
-              options={{ headerShown: false }}
-            />
+              <Stack.Screen
+                name="ForgetPass"
+                component={ForgetPass}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="HomeTab"
+                component={TabNavigator}
+                options={{
+                  headerShown: false,
+                }}
+              />
 
-            <Stack.Screen name="Action" component={Action} />
-            <Stack.Screen name="Edit" component={EditScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+              <Stack.Screen
+                name="Action"
+                component={Action}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Edit"
+                component={EditScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Search"
+                component={Search}
+                options={{ headerShown: false }}
+              />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 
